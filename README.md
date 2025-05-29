@@ -47,25 +47,26 @@ Aplikasi ini dibangun menggunakan Kotlin dan memanfaatkan API eksternal untuk me
 
 ## 📸 Tangkapan Layar (Screenshots)
 
-<!--
+
 <p align="center">
-  <img src="screenshots/Splash_Screen.jpg" alt="Splash Screen" width="200"/>
-  <img src="screenshots/HalamanUtama_light.jpg" alt="Halaman Utama (Light Mode)" width="200"/>
-  <img src="screenshots/HalamanUtama_dark.jpg" alt="Halaman Utama (Dark Mode)" width="200"/>
-  <img src="screenshots/DetailPelacakan_light.jpg" alt="Detail Pelacakan" width="200"/>
-  <img src="screenshots/sidebar.jpg" alt="Riwayat di Sidebar" width="200"/>
-  <img src="screenshots/Eror_resi.jpg" alt="Eror nomor resi" width="200"/>
-  <img src="screenshots/Eror_koneksi.jpg" alt="Eror koneksi" width="200"/>
+  <img src="/screenshots/Splash_Screen.jpg" alt="Splash Screen" width="200"/>
+  <img src="/screenshots/HalamanUtama_light.jpg" alt="Halaman Utama (Light Mode)" width="200"/>
+  <img src="/screenshots/HalamanUtama_dark.jpg" alt="Halaman Utama (Dark Mode)" width="200"/>
+  <img src="/screenshots/DetailPelacakan_light.jpg" alt="Detail Pelacakan" width="200"/>
+  <img src="/screenshots/sidebar.jpg" alt="Riwayat di Sidebar" width="200"/>
+  <img src="/screenshots/Eror_resi.jpg" alt="Eror nomor resi" width="200"/>
+  <img src="/screenshots/Eror_koneksi.jpg" alt="Eror koneksi" width="200"/>
 
 
 </p>
--->
+
 * *(Placeholder: Screenshot Splash Screen)*
 * *(Placeholder: Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Terang)*
 * *(Placeholder: Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Gelap)*
 * *(Placeholder: Screenshot Halaman Detail Pelacakan)*
 * *(Placeholder: Screenshot Sidebar Riwayat Pelacakan)*
 * *(Placeholder: Screenshot Dialog Error)*
+
 
 ## 🛠️ Teknologi & Library yang Digunakan
 
