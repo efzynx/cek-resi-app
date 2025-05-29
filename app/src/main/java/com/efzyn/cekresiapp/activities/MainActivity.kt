@@ -1,4 +1,5 @@
-package com.efzyn.cekresiapp.ui.main // Ganti dengan package name proyekmu
+package com.efzyn.cekresiapp.ui.main
+
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +11,7 @@ import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.Button
 import android.widget.EditText
-import android.widget.LinearLayout // Pastikan ini diimpor
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
@@ -28,6 +29,7 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.efzyn.cekresiapp.BuildConfig
 import com.efzyn.cekresiapp.R
 import com.efzyn.cekresiapp.adapters.CourierAdapter
+import com.efzyn.cekresiapp.adapters.HistoryAdapter
 import com.efzyn.cekresiapp.model.Courier
 import com.efzyn.cekresiapp.model.HistoryItem
 import com.efzyn.cekresiapp.network.RetrofitClient
@@ -60,7 +62,7 @@ class MainActivity : AppCompatActivity() {
 
     // Views di dalam Navigation Drawer untuk Riwayat
     private lateinit var rvHistoryDrawer: RecyclerView
-    private lateinit var historyAdapter: HistoryAdapter
+    private lateinit var historyAdapter: HistoryAdapter // Pastikan nama adapter History benar
     private lateinit var tvHistoryTitleLabelDrawer: TextView
     private lateinit var btnClearHistoryDrawer: Button
     private var navHeaderInlineContainer: LinearLayout? = null
@@ -68,7 +70,7 @@ class MainActivity : AppCompatActivity() {
     // Variabel state
     private var selectedCourier: Courier? = null
     private val apiKey = BuildConfig.BINDERBYTE_API_KEY
-    private val TAG = "MainActivity_UTS" // TAG untuk logging
+    private val TAG = "MainActivity_UTS"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d(TAG, "--> MainActivity onCreate: MULAI <---")
@@ -84,8 +86,8 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "--> MainActivity onCreate: setelah setupNavigationDrawer()")
 
         Log.d(TAG, "--> MainActivity onCreate: Akan mem-post applyInsetsToNavHeader()")
-        if (::drawerLayout.isInitialized && ::navigationView.isInitialized) { // Pastikan keduanya initialized
-            drawerLayout.post { // Atau navigationView.post
+        if (::drawerLayout.isInitialized && ::navigationView.isInitialized) {
+            drawerLayout.post {
                 Log.d(TAG, "--> MainActivity onCreate (dalam post): Memanggil applyInsetsToNavHeader()")
                 applyInsetsToNavHeader()
             }
@@ -120,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         btnTrack = findViewById(R.id.btnTrack)
 
         drawerLayout = findViewById(R.id.drawer_layout)
-        navigationView = findViewById(R.id.nav_view) // navigationView diinisialisasi di sini
+        navigationView = findViewById(R.id.nav_view)
 
         navHeaderInlineContainer = navigationView.findViewById(R.id.nav_header_inline_container)
         if (navHeaderInlineContainer == null) {
@@ -163,23 +165,19 @@ class MainActivity : AppCompatActivity() {
 
     private fun applyInsetsToNavHeader() {
         Log.d(TAG, "--> applyInsetsToNavHeader: FUNGSI DIPANGGIL.")
-
-        // Pasang listener pada navigationView, bukan pada headerView langsung
         ViewCompat.setOnApplyWindowInsetsListener(navigationView) { view, windowInsets ->
             Log.d(TAG, "--> applyInsetsToNavHeader: LISTENER DIPANGGIL PADA NAVIGATIONVIEW!")
             val systemBarsInsets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
             Log.d(TAG, "--> applyInsetsToNavHeader: systemBarsInsets.top (dari NavigationView) = ${systemBarsInsets.top}")
 
-            val headerView = navHeaderInlineContainer // Ambil referensi headerView
+            val headerView = navHeaderInlineContainer
             if (headerView != null) {
                 val initialPaddingLeft = headerView.paddingLeft
                 val initialPaddingRight = headerView.paddingRight
                 val initialPaddingBottom = headerView.paddingBottom
-
-                // Terapkan padding atas ke headerView
                 headerView.setPadding(
                     initialPaddingLeft,
-                    systemBarsInsets.top, // Gunakan inset atas dari NavigationView
+                    systemBarsInsets.top,
                     initialPaddingRight,
                     initialPaddingBottom
                 )
@@ -187,10 +185,8 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.e(TAG, "--> applyInsetsToNavHeader: KESALAHAN! navHeaderInlineContainer adalah null di dalam listener NavigationView.")
             }
-            windowInsets // Kembalikan insets asli agar NavigationView bisa memprosesnya juga
+            windowInsets
         }
-
-        // Minta agar insets diterapkan pada navigationView
         if (ViewCompat.isAttachedToWindow(navigationView)) {
             Log.d(TAG, "--> applyInsetsToNavHeader: navigationView sudah attached, meminta applyInsets.")
             ViewCompat.requestApplyInsets(navigationView)
@@ -209,6 +205,14 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCourierRecyclerView() {
         courierAdapter = CourierAdapter(emptyList()) { courier ->
+            // Dapatkan posisi item yang diklik di dalam daftar yang mungkin sudah terfilter
+            val clickedPositionInFilteredList = courierAdapter.couriersFiltered.indexOf(courier)
+
+            if (clickedPositionInFilteredList != -1) {
+                // Update selectedPosition di adapter
+                courierAdapter.setSelectedPosition(clickedPositionInFilteredList)
+            }
+
             selectedCourier = courier
             tvSelectedCourier.text = "Kurir: ${courier.name}"
             tilAwbNumber.visibility = View.VISIBLE
@@ -216,7 +220,7 @@ class MainActivity : AppCompatActivity() {
             searchViewCouriers.setQuery("", false)
             searchViewCouriers.clearFocus()
             etAwbNumber.requestFocus()
-            Log.d(TAG, "Kurir dipilih: ${courier.name} (${courier.code})")
+            Log.d(TAG, "Kurir dipilih: ${courier.name} (${courier.code}), Posisi di filter: $clickedPositionInFilteredList")
             Toast.makeText(this, "Kurir dipilih: ${courier.name}", Toast.LENGTH_SHORT).show()
         }
         rvCouriers.layoutManager = LinearLayoutManager(this)
@@ -227,6 +231,11 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             Log.d(TAG, "Swipe refresh kurir dipicu.")
             fetchCouriers()
+            // Reset seleksi kurir saat refresh jika diinginkan
+            // courierAdapter.setSelectedPosition(RecyclerView.NO_POSITION)
+            // selectedCourier = null
+            // tvSelectedCourier.text = "Kurir belum dipilih"
+            // updateTrackButtonState()
         }
     }
 
@@ -241,7 +250,7 @@ class MainActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     response.body()?.let {
                         allCouriersList = it
-                        courierAdapter.setData(allCouriersList)
+                        courierAdapter.setData(allCouriersList) // setData akan handle reset selectedPosition jika perlu
                         Log.d(TAG, "Daftar kurir dimuat: ${it.size} item.")
                     } ?: Log.w(TAG, "Body respons kurir null.")
                 } else {
@@ -268,6 +277,11 @@ class MainActivity : AppCompatActivity() {
 
             override fun onQueryTextChange(newText: String?): Boolean {
                 courierAdapter.filter.filter(newText)
+                // Saat teks pencarian berubah, selectedPosition di adapter akan diupdate
+                // oleh logika publishResults di adapter jika item yang dipilih masih ada.
+                // Kita mungkin perlu mengupdate selectedCourier di MainActivity jika item yang dipilih berubah
+                // atau hilang dari daftar filter.
+                // Untuk saat ini, kita biarkan adapter yang menanganinya.
                 return true
             }
         })

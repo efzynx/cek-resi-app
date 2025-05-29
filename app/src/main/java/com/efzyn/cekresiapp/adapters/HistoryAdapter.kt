@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.ui.main // Ganti dengan package-mu
+package com.efzyn.cekresiapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View

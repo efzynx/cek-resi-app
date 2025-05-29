@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.network // Ganti dengan package-mu
+package com.efzyn.cekresiapp.network
 
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor

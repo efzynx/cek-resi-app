@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.model // Ganti dengan package-mu
+package com.efzyn.cekresiapp.model
 
 import com.google.gson.annotations.SerializedName
 

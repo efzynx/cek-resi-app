@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.ui.splash // Ganti dengan package-mu
+package com.efzyn.cekresiapp.ui.splash
 
 import android.annotation.SuppressLint
 import android.content.Intent

@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.utils // Ganti dengan package-mu
+package com.efzyn.cekresiapp.utils
 
 import android.content.Context
 import android.util.Log

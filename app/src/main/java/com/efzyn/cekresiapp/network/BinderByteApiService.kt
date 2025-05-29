@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.network // Ganti dengan package-mu
+package com.efzyn.cekresiapp.network
 
 import com.efzyn.cekresiapp.model.Courier
 import com.efzyn.cekresiapp.model.TrackingResponse
