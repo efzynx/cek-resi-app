@@ -17,14 +17,14 @@ data class TrackData(
     @SerializedName("detail")
     val detail: TrackingDetail,
     @SerializedName("history")
-    val history: List<TrackingHistoryItem> // Menggunakan nama yang lebih jelas
+    val history: List<TrackingHistoryItem>
 )
 
 data class TrackingSummary(
     @SerializedName("awb")
     val awb: String,
     @SerializedName("courier")
-    val courier: String, // Nama kurir dari API tracking
+    val courier: String,
     @SerializedName("service")
     val service: String?,
     @SerializedName("status")
@@ -50,11 +50,7 @@ data class TrackingDetail(
     val receiver: String?
 )
 
-// Mengganti nama dari TrackingHistory menjadi TrackingHistoryItem agar tidak bentrok
-// dengan model HistoryItem untuk SharedPreferences, meskipun fieldnya sama.
-// Atau, jika fieldnya identik, kamu bisa menggunakan satu model saja.
-// Untuk contoh ini, saya bedakan untuk kejelasan konteks API vs Lokal.
-data class TrackingHistoryItem( // Ini adalah item riwayat dari API BinderByte
+data class TrackingHistoryItem( // Item riwayat dari API BinderByte
     @SerializedName("date")
     val date: String,
     @SerializedName("desc")

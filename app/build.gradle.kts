@@ -54,7 +54,7 @@ dependencies {
     // Retrofit & Gson Converter (untuk networking dan parsing JSON)
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // Untuk logging request/response (opsional, berguna saat development)
+    implementation("com.squareup.okhttp3:logging-interceptor:4.9.3") // Untuk logging request/response (Hanya untuk development)
 
     // Coroutines (untuk asynchronous programming)
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3")
@@ -75,6 +75,4 @@ dependencies {
     // SwipeRefreshLayout (untuk fitur refresh) [cite: 3]
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
-    // Gson(untuk fitur bookmark/history)
-    implementation("com.google.code.gson:gson:2.9.0")
 }

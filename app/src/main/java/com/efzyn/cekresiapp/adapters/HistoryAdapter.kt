@@ -17,7 +17,7 @@ class HistoryAdapter(
 
     fun updateData(newHistoryList: List<HistoryItem>) {
         this.historyList.clear()
-        this.historyList.addAll(newHistoryList.sortedByDescending { it.timestamp }) // Urutkan berdasarkan terbaru
+        this.historyList.addAll(newHistoryList.sortedByDescending { it.timestamp }) // Urutkan berdasarkan yang terbaru
         notifyDataSetChanged()
     }
 
@@ -25,7 +25,6 @@ class HistoryAdapter(
         if (position >= 0 && position < historyList.size) {
             historyList.removeAt(position)
             notifyItemRemoved(position)
-            // Tidak perlu notifyItemRangeChanged jika hanya satu item dihapus dan list sudah benar
         }
     }
 

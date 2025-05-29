@@ -10,7 +10,7 @@ interface BinderByteApiService {
 
     @GET("v1/list_courier")
     suspend fun getListCourier(
-        @Query("api_key") apiKey: String // Meskipun mungkin tidak wajib untuk endpoint ini
+        @Query("api_key") apiKey: String
     ): Response<List<Courier>>
 
     @GET("v1/track")

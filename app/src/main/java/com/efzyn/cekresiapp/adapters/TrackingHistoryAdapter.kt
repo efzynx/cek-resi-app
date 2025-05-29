@@ -35,7 +35,7 @@ class TrackingHistoryAdapter(
         private val tvLocation: TextView = itemView.findViewById(R.id.tvHistoryLocation)
 
         fun bind(history: TrackingHistoryItem) {
-            tvDate.text = history.date // Anda bisa memformat tanggal ini jika mau
+            tvDate.text = history.date
             tvDescription.text = history.desc
             if (history.location.isNullOrEmpty()) {
                 tvLocation.visibility = View.GONE

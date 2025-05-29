@@ -1,5 +1,4 @@
-package com.efzyn.cekresiapp.ui.main
-
+package com.efzyn.cekresiapp.ui.main // Ganti dengan package name proyekmu
 
 import android.content.Intent
 import android.os.Bundle
@@ -39,6 +38,7 @@ import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.google.android.material.navigation.NavigationView
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.coroutines.launch
+import java.net.UnknownHostException
 
 class MainActivity : AppCompatActivity() {
 
@@ -49,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var swipeRefreshLayout: SwipeRefreshLayout
     private lateinit var searchViewCouriers: SearchView
     private var allCouriersList: List<Courier> = emptyList()
+    private lateinit var tvEmptyCouriers: TextView
 
     private lateinit var tvSelectedCourier: TextView
     private lateinit var etAwbNumber: EditText
@@ -62,10 +63,12 @@ class MainActivity : AppCompatActivity() {
 
     // Views di dalam Navigation Drawer untuk Riwayat
     private lateinit var rvHistoryDrawer: RecyclerView
-    private lateinit var historyAdapter: HistoryAdapter // Pastikan nama adapter History benar
+    private lateinit var historyAdapter: HistoryAdapter
     private lateinit var tvHistoryTitleLabelDrawer: TextView
     private lateinit var btnClearHistoryDrawer: Button
     private var navHeaderInlineContainer: LinearLayout? = null
+    private lateinit var tvEmptyHistoryDrawer: TextView
+
 
     // Variabel state
     private var selectedCourier: Courier? = null
@@ -116,6 +119,8 @@ class MainActivity : AppCompatActivity() {
         progressBarCouriers = findViewById(R.id.progressBarCouriers)
         swipeRefreshLayout = findViewById(R.id.swipeRefreshLayout)
         searchViewCouriers = findViewById(R.id.searchViewCouriers)
+        tvEmptyCouriers = findViewById(R.id.tvEmptyCouriers) // Inisialisasi
+
         tvSelectedCourier = findViewById(R.id.tvSelectedCourier)
         etAwbNumber = findViewById(R.id.etAwbNumber)
         tilAwbNumber = findViewById(R.id.tilAwbNumber)
@@ -133,6 +138,7 @@ class MainActivity : AppCompatActivity() {
         rvHistoryDrawer = navigationView.findViewById(R.id.rvHistory_drawer)
         tvHistoryTitleLabelDrawer = navigationView.findViewById(R.id.tvHistoryTitleLabel_drawer)
         btnClearHistoryDrawer = navigationView.findViewById(R.id.btnClearHistory_drawer)
+        tvEmptyHistoryDrawer = navigationView.findViewById(R.id.tvEmptyHistory_drawer) // Inisialisasi
         Log.d(TAG, "--> initializeMainViews: SELESAI <---")
     }
 
@@ -205,14 +211,10 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupCourierRecyclerView() {
         courierAdapter = CourierAdapter(emptyList()) { courier ->
-            // Dapatkan posisi item yang diklik di dalam daftar yang mungkin sudah terfilter
             val clickedPositionInFilteredList = courierAdapter.couriersFiltered.indexOf(courier)
-
             if (clickedPositionInFilteredList != -1) {
-                // Update selectedPosition di adapter
                 courierAdapter.setSelectedPosition(clickedPositionInFilteredList)
             }
-
             selectedCourier = courier
             tvSelectedCourier.text = "Kurir: ${courier.name}"
             tilAwbNumber.visibility = View.VISIBLE
@@ -231,41 +233,75 @@ class MainActivity : AppCompatActivity() {
         swipeRefreshLayout.setOnRefreshListener {
             Log.d(TAG, "Swipe refresh kurir dipicu.")
             fetchCouriers()
-            // Reset seleksi kurir saat refresh jika diinginkan
-            // courierAdapter.setSelectedPosition(RecyclerView.NO_POSITION)
-            // selectedCourier = null
-            // tvSelectedCourier.text = "Kurir belum dipilih"
-            // updateTrackButtonState()
         }
     }
 
+    // --- MODIFIKASI FUNGSI fetchCouriers ---
     private fun fetchCouriers() {
         Log.d(TAG, "Memulai fetch daftar kurir...")
         progressBarCouriers.visibility = View.VISIBLE
         swipeRefreshLayout.isRefreshing = true
+        rvCouriers.visibility = View.GONE
+        tvEmptyCouriers.visibility = View.GONE
 
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.getListCourier(apiKey)
                 if (response.isSuccessful) {
-                    response.body()?.let {
-                        allCouriersList = it
-                        courierAdapter.setData(allCouriersList) // setData akan handle reset selectedPosition jika perlu
-                        Log.d(TAG, "Daftar kurir dimuat: ${it.size} item.")
-                    } ?: Log.w(TAG, "Body respons kurir null.")
+                    response.body()?.let { couriers ->
+                        allCouriersList = couriers
+                        courierAdapter.setData(allCouriersList)
+                        if (couriers.isEmpty()) {
+                            rvCouriers.visibility = View.GONE
+                            tvEmptyCouriers.text = "Tidak ada data kurir yang tersedia."
+                            tvEmptyCouriers.visibility = View.VISIBLE
+                        } else {
+                            rvCouriers.visibility = View.VISIBLE
+                            tvEmptyCouriers.visibility = View.GONE
+                        }
+                        Log.d(TAG, "Daftar kurir dimuat: ${couriers.size} item.")
+                    } ?: run {
+                        Log.w(TAG, "Body respons kurir null.")
+                        handleFetchCourierError("Data kurir kosong dari server.")
+                    }
                 } else {
                     Log.e(TAG, "Gagal fetch kurir. Kode: ${response.code()}, Msg: ${response.message()}")
-                    Toast.makeText(this@MainActivity, "Gagal memuat kurir: ${response.message()}", Toast.LENGTH_LONG).show()
+                    handleFetchCourierError("Gagal memuat daftar kurir (Kode: ${response.code()}).")
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Exception saat fetch kurir!", e)
-                Toast.makeText(this@MainActivity, "Error memuat kurir: ${e.message}", Toast.LENGTH_LONG).show()
+                if (e is UnknownHostException) {
+                    handleFetchCourierError("Error: Tidak dapat tersambung. Pastikan terhubung dengan internet.", true)
+                } else {
+                    handleFetchCourierError("Error: ${e.localizedMessage ?: "Terjadi kesalahan tidak diketahui"}.")
+                }
             } finally {
                 progressBarCouriers.visibility = View.GONE
                 swipeRefreshLayout.isRefreshing = false
             }
         }
     }
+
+    private fun handleFetchCourierError(message: String, isConnectionError: Boolean = false) {
+        rvCouriers.visibility = View.GONE
+//        Menampilkan pesan eror koneksi
+        tvEmptyCouriers.text = message
+        tvEmptyCouriers.visibility = View.VISIBLE
+
+        val dialogTitle = if (isConnectionError) "Koneksi Bermasalah" else "Gagal Memuat Data"
+        val dialogMessage = if (isConnectionError) "Error: Tidak dapat tersambung. Pastikan terhubung dengan internet." else message
+
+        if (!isFinishing && !isDestroyed) {
+            MaterialAlertDialogBuilder(this)
+                .setTitle(dialogTitle)
+                .setMessage(dialogMessage)
+                .setPositiveButton("OK", null)
+                .setIcon(if (isConnectionError) R.drawable.ic_signal_off else R.drawable.ic_warning_red) // Ganti dengan ikon yang sesuai
+                .show()
+        }
+    }
+
+
 
     private fun setupSearchView() {
         searchViewCouriers.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -274,14 +310,8 @@ class MainActivity : AppCompatActivity() {
                 searchViewCouriers.clearFocus()
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 courierAdapter.filter.filter(newText)
-                // Saat teks pencarian berubah, selectedPosition di adapter akan diupdate
-                // oleh logika publishResults di adapter jika item yang dipilih masih ada.
-                // Kita mungkin perlu mengupdate selectedCourier di MainActivity jika item yang dipilih berubah
-                // atau hilang dari daftar filter.
-                // Untuk saat ini, kita biarkan adapter yang menanganinya.
                 return true
             }
         })
@@ -349,10 +379,12 @@ class MainActivity : AppCompatActivity() {
             tvHistoryTitleLabelDrawer.visibility = View.VISIBLE
             rvHistoryDrawer.visibility = View.VISIBLE
             btnClearHistoryDrawer.visibility = View.VISIBLE
+            tvEmptyHistoryDrawer.visibility = View.GONE
         } else {
             tvHistoryTitleLabelDrawer.visibility = View.GONE
             rvHistoryDrawer.visibility = View.GONE
             btnClearHistoryDrawer.visibility = View.GONE
+            tvEmptyHistoryDrawer.visibility = View.VISIBLE
         }
     }
 
@@ -363,7 +395,6 @@ class MainActivity : AppCompatActivity() {
 
     private fun performTracking() {
         val awbNumberInput = etAwbNumber.text.toString().trim()
-
         if (selectedCourier == null) {
             Toast.makeText(this, "Silakan pilih kurir dahulu.", Toast.LENGTH_SHORT).show()
             return
@@ -374,12 +405,10 @@ class MainActivity : AppCompatActivity() {
         } else {
             tilAwbNumber.error = null
         }
-
         Log.d(TAG, "Memulai pelacakan AWB: $awbNumberInput, Kurir: ${selectedCourier!!.name}")
         val historyItem = HistoryItem(awbNumberInput, selectedCourier!!.code, selectedCourier!!.name)
         HistoryManager.addHistoryItem(this, historyItem)
         loadHistoryToDrawer()
-
         val intent = Intent(this, TrackingDetailsActivity::class.java).apply {
             putExtra(TrackingDetailsActivity.EXTRA_AWB, awbNumberInput)
             putExtra(TrackingDetailsActivity.EXTRA_COURIER_CODE, selectedCourier!!.code)
@@ -392,7 +421,6 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         Log.d(TAG, "onResume: Activity dilanjutkan.")
         loadHistoryToDrawer()
-
         etAwbNumber.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {

@@ -12,6 +12,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarMain"
             android:layout_width="0dp"
@@ -103,7 +104,21 @@
                 android:clipToPadding="false"
                 android:paddingBottom="8dp"
                 tools:listitem="@layout/item_courier" />
+
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tvEmptyCouriers"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Tidak ada data kurir."
+            android:textAppearance="?attr/textAppearanceSubtitle1"
+            android:visibility="gone"
+            app:layout_constraintTop_toTopOf="@id/swipeRefreshLayout"
+            app:layout_constraintBottom_toBottomOf="@id/swipeRefreshLayout"
+            app:layout_constraintStart_toStartOf="@id/swipeRefreshLayout"
+            app:layout_constraintEnd_toEndOf="@id/swipeRefreshLayout"
+            tools:visibility="visible"/>
 
         <ProgressBar
             android:id="@+id/progressBarCouriers"
@@ -124,74 +139,89 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true">
-        <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
 
         <LinearLayout
-            android:id="@+id/nav_header_inline_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryDark"
-            android:orientation="vertical"
-            android:gravity="bottom"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingBottom="16dp"
-            android:theme="@style/ThemeOverlay.AppCompat.Dark">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <TextView
+            <LinearLayout
+                android:id="@+id/nav_header_inline_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/colorPrimaryDark"
+                android:orientation="vertical"
+                android:gravity="bottom"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingBottom="16dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark">
 
+                <ImageView
+                    android:id="@+id/ivLogoDrawer"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:layout_marginTop="16dp"
+                    android:src="@mipmap/ic_launcher_round" /> <TextView
                 android:id="@+id/nav_header_title_inline"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="16dp" android:text="Riwayat Pelacakan"
+                android:layout_marginTop="8dp"
+                android:text="Riwayat Pelacakan"
                 android:textAppearance="@style/TextAppearance.AppCompat.Body1"
                 android:textSize="18sp"
                 android:textStyle="bold"/>
 
+                <TextView
+                    android:id="@+id/nav_header_subtitle_inline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Resi yang pernah Anda lacak"/>
+            </LinearLayout>
+
             <TextView
-                android:id="@+id/nav_header_subtitle_inline"
+                android:id="@+id/tvHistoryTitleLabel_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Daftar Riwayat Tersimpan"
+                android:textAppearance="?attr/textAppearanceSubtitle1"
+                android:paddingStart="16dp"
+                android:paddingEnd="16dp"
+                android:paddingTop="16dp"
+                android:paddingBottom="8dp"
+                android:visibility="gone"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvHistory_drawer"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:paddingHorizontal="8dp"
+                android:clipToPadding="false"
+                tools:listitem="@layout/item_history" />
+
+            <TextView
+                android:id="@+id/tvEmptyHistory_drawer"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Resi yang pernah Anda lacak"/>
+                android:text="Belum ada riwayat pelacakan."
+                android:layout_gravity="center"
+                android:padding="16dp"
+                android:visibility="gone"
+                tools:visibility="visible"/>
+
+            <Button
+                android:id="@+id/btnClearHistory_drawer"
+                style="@style/Widget.MaterialComponents.Button.TextButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_margin="8dp"
+                android:text="Bersihkan Semua Riwayat"
+                android:textColor="?attr/colorError"
+                android:visibility="gone"/>
+
         </LinearLayout>
-
-        <TextView
-            android:id="@+id/tvHistoryTitleLabel_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Daftar Riwayat Tersimpan"
-            android:textAppearance="?attr/textAppearanceSubtitle1"
-            android:paddingStart="16dp"
-            android:paddingEnd="16dp"
-            android:paddingTop="16dp"
-            android:paddingBottom="8dp"
-            android:visibility="gone"/>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvHistory_drawer"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:paddingHorizontal="8dp"
-            android:clipToPadding="false"
-            tools:listitem="@layout/item_history" />
-
-        <Button
-            android:id="@+id/btnClearHistory_drawer"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="8dp"
-            android:text="Bersihkan Semua Riwayat"
-            android:textColor="?attr/colorError"
-            android:visibility="gone"/>
-
-    </LinearLayout>
     </com.google.android.material.navigation.NavigationView>
 
 </androidx.drawerlayout.widget.DrawerLayout>
-

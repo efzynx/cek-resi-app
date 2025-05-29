@@ -15,12 +15,12 @@ import com.efzyn.cekresiapp.BuildConfig
 import com.efzyn.cekresiapp.R
 import com.efzyn.cekresiapp.adapters.TrackingHistoryAdapter
 import com.efzyn.cekresiapp.model.TrackData
-// import com.efzyn.cekresiapp.model.TrackingHistoryItem // Sudah ada di model.TrackingResponse
 import com.efzyn.cekresiapp.network.RetrofitClient
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.launch
-
+import org.json.JSONObject
 
 class TrackingDetailsActivity : AppCompatActivity() {
 
@@ -47,7 +47,7 @@ class TrackingDetailsActivity : AppCompatActivity() {
     private lateinit var tvHistoryTitle: TextView
     private lateinit var rvTrackingHistory: RecyclerView
     private lateinit var tvErrorDetails: TextView
-    private lateinit var historyAdapter: TrackingHistoryAdapter // Adapter untuk riwayat dari API
+    private lateinit var historyAdapter: TrackingHistoryAdapter
 
     private val apiKey = BuildConfig.BINDERBYTE_API_KEY
 
@@ -92,19 +92,19 @@ class TrackingDetailsActivity : AppCompatActivity() {
         tvOriginDestination = findViewById(R.id.tvOriginDestination)
         tvHistoryTitle = findViewById(R.id.tvHistoryTitle)
         rvTrackingHistory = findViewById(R.id.rvTrackingHistory)
-        tvErrorDetails = findViewById(R.id.tvErrorDetails)
+        tvErrorDetails = findViewById(R.id.tvErrorDetails) // Tetap inisialisasi, tapi mungkin tidak dipakai
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
-            onBackPressedDispatcher.onBackPressed()
+            onBackPressedDispatcher.onBackPressed() // Gunakan ini untuk API 33+
             return true
         }
         return super.onOptionsItemSelected(item)
     }
 
     private fun setupRecyclerView() {
-        historyAdapter = TrackingHistoryAdapter(emptyList()) // Adapter untuk TrackingHistoryItem dari API
+        historyAdapter = TrackingHistoryAdapter(emptyList())
         rvTrackingHistory.layoutManager = LinearLayoutManager(this)
         rvTrackingHistory.adapter = historyAdapter
         Log.d(TAG, "RecyclerView Riwayat API disiapkan.")
@@ -113,24 +113,50 @@ class TrackingDetailsActivity : AppCompatActivity() {
     private fun fetchTrackingDetails() {
         Log.d(TAG, "Memulai fetch detail pelacakan untuk AWB: $awbNumber, Kurir: $courierCode")
         setLoadingState(true)
+        tvErrorDetails.visibility = View.GONE // Sembunyikan TextView error default
 
         lifecycleScope.launch {
             try {
                 val response = RetrofitClient.instance.trackShipment(apiKey, courierCode, awbNumber)
-                Log.d(TAG, "Respons API Detail: ${response.raw()}")
+                Log.d(TAG, "Respons API Detail Mentah: ${response.raw()}") // Log respons mentah
                 if (response.isSuccessful && response.body()?.data != null) {
                     val trackData = response.body()!!.data!!
                     Log.d(TAG, "Data pelacakan diterima: $trackData")
                     displayTrackingData(trackData)
                 } else {
-                    val errorBody = response.errorBody()?.string()
-                    val errorMsg = response.body()?.message ?: response.message() ?: "Gagal melacak resi (Kode: ${response.code()})"
-                    Log.e(TAG, "Gagal fetch detail. Kode: ${response.code()}, Msg: $errorMsg, ErrorBody: $errorBody")
-                    showError(errorMsg)
+                    // --- MODIFIKASI PENANGANAN ERROR ---
+                    var specificErrorMessage = "Gagal melacak resi." // Pesan default
+                    val errorBodyString = response.errorBody()?.string()
+                    if (!errorBodyString.isNullOrEmpty()) {
+                        Log.e(TAG, "Error Body: $errorBodyString")
+                        try {
+                            // Coba parsing JSON dari error body
+                            val jsonError = JSONObject(errorBodyString)
+                            specificErrorMessage = jsonError.optString("message", specificErrorMessage) // Ambil field "message"
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Gagal parsing JSON error body: $errorBodyString", e)
+                            // Jika parsing gagal, gunakan pesan dari kode status jika ada, atau pesan default
+                            specificErrorMessage = when (response.code()) {
+                                400 -> "Nomor resi atau kurir tidak valid. Periksa kembali input Anda."
+                                401, 403 -> "Autentikasi gagal. Periksa API Key Anda."
+                                404 -> "Data tidak ditemukan. Nomor resi mungkin salah atau belum terdaftar."
+                                500, 502, 503, 504 -> "Server sedang bermasalah. Coba lagi nanti."
+                                else -> specificErrorMessage // Gunakan pesan default jika kode tidak dikenal
+                            }
+                        }
+                    } else if (response.body()?.message != null && response.body()?.message?.isNotEmpty() == true ) {
+                        // Jika error body kosong tapi ada message di body sukses
+                        specificErrorMessage = response.body()!!.message!!
+                    } else if (response.message().isNotEmpty()){
+                        specificErrorMessage = response.message()
+                    }
+
+                    Log.e(TAG, "Gagal fetch detail. Kode: ${response.code()}, Pesan API: '$specificErrorMessage'")
+                    showErrorDialog("Error ${response.code()}", specificErrorMessage)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Exception saat fetch detail!", e)
-                showError("Error Aplikasi: ${e.localizedMessage ?: "Terjadi kesalahan"}")
+                showErrorDialog("Error Aplikasi", "Terjadi kesalahan: ${e.localizedMessage ?: "Tidak diketahui"}")
             } finally {
                 setLoadingState(false)
             }
@@ -153,20 +179,15 @@ class TrackingDetailsActivity : AppCompatActivity() {
         Log.d(TAG, "Menampilkan data pelacakan...")
         cardSummary.visibility = View.VISIBLE
         tvAwbNumberDetail.text = "No. Resi: ${data.summary.awb}"
-
-        val finalCourierName = courierNameDisplay ?: data.summary.courier // Prioritaskan nama dari intent
+        val finalCourierName = courierNameDisplay ?: data.summary.courier
         tvCourierNameDetail.text = "Kurir: $finalCourierName"
-
         tvStatusDetail.text = "Status: ${data.summary.status}"
         tvServiceDetail.text = if (data.summary.service.isNullOrEmpty()) "Layanan: -" else "Layanan: ${data.summary.service}"
-
         val lastUpdateText = "${data.summary.desc?.takeIf { it.isNotBlank() } ?: "Status terakhir"} (${data.summary.date})"
         tvLastUpdateDesc.text = "Update: $lastUpdateText"
-
         val shipperText = data.detail.shipper?.takeIf { it.isNotBlank() } ?: "-"
         val receiverText = data.detail.receiver?.takeIf { it.isNotBlank() } ?: "-"
         tvShipperReceiver.text = "Pengirim: $shipperText \nKepada: $receiverText"
-
         val originText = data.detail.origin?.takeIf { it.isNotBlank() } ?: "-"
         val destinationText = data.detail.destination?.takeIf { it.isNotBlank() } ?: "-"
         tvOriginDestination.text = "Asal: $originText \nTujuan: $destinationText"
@@ -183,15 +204,21 @@ class TrackingDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun showError(message: String) {
-        Log.e(TAG, "Menampilkan error: $message")
-        cardSummary.visibility = View.GONE
-        tvHistoryTitle.visibility = View.GONE
-        rvTrackingHistory.visibility = View.GONE
-        tvErrorDetails.visibility = View.VISIBLE
-        tvErrorDetails.text = message
-        if (message.isNotBlank()) {
-            Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    // Ganti showError dengan showErrorDialog
+    private fun showErrorDialog(title: String, message: String) {
+        Log.e(TAG, "showErrorDialog: Title: '$title', Message: '$message'")
+        if (isFinishing || isDestroyed) {
+            // Hindari menampilkan dialog jika activity sudah tidak aktif
+            Log.w(TAG, "Activity is finishing or destroyed, not showing error dialog.")
+            return
         }
+        MaterialAlertDialogBuilder(this)
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton("OK") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .setIcon(R.drawable.ic_warning_red)
+            .show()
     }
 }

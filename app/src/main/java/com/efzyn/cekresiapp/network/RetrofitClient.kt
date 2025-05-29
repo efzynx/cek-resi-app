@@ -7,7 +7,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
-    // Sesuaikan BASE_URL jika berbeda atau jika endpoint list_courier dan track ada di host berbeda
+    // BASE_URL API
     private const val BASE_URL = "https://api.binderbyte.com/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -17,7 +17,7 @@ object RetrofitClient {
 
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
-        .connectTimeout(30, TimeUnit.SECONDS) // Tambahkan timeout
+        .connectTimeout(30, TimeUnit.SECONDS)
         .readTimeout(30, TimeUnit.SECONDS)
         .writeTimeout(30, TimeUnit.SECONDS)
         .build()
