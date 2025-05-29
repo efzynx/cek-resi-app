@@ -7,6 +7,7 @@ plugins {
 android {
     namespace = "com.efzyn.cekresiapp"
     compileSdk = 35
+
     buildFeatures {
         buildConfig = true
     }
@@ -17,18 +18,30 @@ android {
         targetSdk = 35
         versionCode = 1
         versionName = "1.0"
+        // Mengambil API Key dari gradle.properties
         buildConfigField ("String", "BINDERBYTE_API_KEY", "\"${project.findProperty("BINDERBYTE_API_KEY") ?: ""}\"")
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // --- PENDEKATAN MODERN UNTUK MENGUBAH NAMA DASAR APK ---
+    // Ini akan mempengaruhi SEMUA build type (debug, release, dll.)
+    setProperty("archivesBaseName", "Cek_Resi_App-v${defaultConfig.versionName}")
+
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = false // Untuk rilis produksi, pertimbangkan true.
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            // Tidak perlu lagi blok applicationVariants.all di sini untuk mengubah nama file
+            // jika setProperty("archivesBaseName", ...) sudah cukup.
+        }
+        debug {
+            // Konfigurasi untuk build type debug bisa ditambahkan di sini jika perlu
+            // Nama file debug juga akan mengikuti format dari setProperty("archivesBaseName", ...)
+            // yaitu: CekResiAppUTS-v[versionName]-debug.apk
         }
     }
     compileOptions {
@@ -66,13 +79,13 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
 
     // Material Design Components (untuk UI yang lebih baik)
-    implementation("com.google.android.material:material:1.11.0")
+    // implementation("com.google.android.material:material:1.11.0") // Sudah ada via alias(libs.material)
 
     // Glide (untuk memuat gambar logo kurir, jika ada URL dari API)
     implementation("com.github.bumptech.glide:glide:4.16.0")
     annotationProcessor("com.github.bumptech.glide:compiler:4.12.0")
 
-    // SwipeRefreshLayout (untuk fitur refresh) [cite: 3]
+    // SwipeRefreshLayout (untuk fitur refresh)
     implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
 
 }
