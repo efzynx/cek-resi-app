@@ -110,7 +110,9 @@ Aplikasi ini menggunakan API publik dari **BinderByte** untuk mendapatkan inform
 
 Anda dapat mengunduh versi terbaru aplikasi Cek Resi langsung dari halaman rilis kami di GitHub:
 
-* **[Unduh Cek Resi App v1.0 (APK)](https://github.com/efzynx/cek-resi-app/releases/download/Releases/Cek_Resi_App-v1.0-release.apk])**
+* **[Unduh Cek Resi App v1.0 (APK)](https://github.com/efzynx/cek-resi-app/releases/download/Releases/Cek_Resi_App-v1.0-release.apk)**
+
+Atau unduh melalui [Github Releases](https://github.com/efzynx/cek-resi-app/releases)
 
 Jika terjadi strict, pastikan Anda telah mengizinkan instalasi dari "Sumber Tidak Dikenal" atau "Install unknown apps" di pengaturan device Android Anda sebelum menginstal APK.
 
