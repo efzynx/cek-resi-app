@@ -1,7 +1,7 @@
 # Cek Resi App - Aplikasi Pelacak Kiriman Paket Anda 📦✨
 
 <p align="center">
-  <img src="app/src/main/res/mipmap-xhdpi/ic_launcher.webp" alt="Logo Aplikasi Cek Resi" width="150"/>
+  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.webp" alt="Logo Aplikasi Cek Resi" width="150"/>
 </p>
 
 Selamat datang di **Cek Resi App**! Aplikasi Android sederhana namun powerful untuk melacak status pengiriman paket Anda dari berbagai kurir di Indonesia dengan mudah dan cepat. Proyek ini dibuat sebagai bagian dari Ujian Tengah Semester (UTS) mata kuliah Pemrograman Mobile Android.
