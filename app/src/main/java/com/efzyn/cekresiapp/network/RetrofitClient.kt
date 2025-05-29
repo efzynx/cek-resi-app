@@ -14,7 +14,7 @@ object RetrofitClient {
         // Set ke Level.BODY hanya untuk debug build, untuk release bisa Level.NONE atau BASIC
         level = HttpLoggingInterceptor.Level.BODY
     }
-
+//    Set timeout ke API
     private val okHttpClient = OkHttpClient.Builder()
         .addInterceptor(loggingInterceptor)
         .connectTimeout(30, TimeUnit.SECONDS)

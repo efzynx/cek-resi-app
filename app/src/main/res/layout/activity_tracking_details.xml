@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
+        <!--        Toolbar pada bagian atas        -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarDetails"
             android:layout_width="match_parent"
@@ -18,6 +19,7 @@
             app:title="Detail Pelacakan" />
     </com.google.android.material.appbar.AppBarLayout>
 
+<!--    Untuk scroll layar jika konten lebih panjang dari ukuran layar    -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

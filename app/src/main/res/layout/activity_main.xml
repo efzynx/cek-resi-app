@@ -13,6 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--        action bar          -->
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbarMain"
             android:layout_width="0dp"
@@ -24,6 +25,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!--        Search View untuk pencarian/filter daftar kurir           -->
         <androidx.appcompat.widget.SearchView
             android:id="@+id/searchViewCouriers"
             android:layout_width="0dp"
@@ -36,6 +38,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"/>
 
+        <!--        Input resi dan button untuk melacak         -->
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/cardViewInput"
             android:layout_width="0dp"
@@ -86,6 +89,7 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
+<!--        Memungkinkan pengguna untuk melakukan "tarik untuk refresh"         -->
         <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="0dp"
@@ -133,6 +137,7 @@
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <!--    Sidebar/panel samping       -->
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/nav_view"
         android:layout_width="wrap_content"
