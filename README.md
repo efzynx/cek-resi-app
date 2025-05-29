@@ -23,10 +23,9 @@ Aplikasi ini dibangun menggunakan Kotlin dan memanfaatkan API eksternal untuk me
 * **Splash Screen**: Tampilan pembuka aplikasi yang menarik dengan logo.
 * **Daftar Kurir Dinamis**: Menampilkan daftar kurir yang didukung, diambil dari API.
     * Fitur **Refresh** untuk memperbarui daftar kurir.
-* **Pencarian & Filter Kurir**: Memudahkan pengguna menemukan kurir yang diinginkan dari daftar.
+* **Pencarian/Filter Kurir**: Memudahkan pengguna menemukan kurir yang diinginkan dari daftar.
 * **Pemilihan Kurir Interaktif**: Item kurir yang dipilih akan diberi warna pembeda (selaras dengan tema ungu aplikasi).
 * **Pelacakan Resi**: Input nomor resi dan pemilihan kurir untuk memulai pelacakan.
-    * Feedback visual (loading state) pada tombol "Lacak Paket".
 * **Halaman Detail Pelacakan**:
     * Menampilkan informasi ringkasan paket (No. Resi, Kurir, Status Terakhir, Layanan, Deskripsi Update).
     * Menampilkan detail pengirim, penerima, asal, dan tujuan (jika tersedia dari API).
@@ -114,7 +113,9 @@ Anda dapat mengunduh versi terbaru aplikasi Cek Resi langsung dari halaman rilis
 
 Atau unduh melalui [Github Releases](https://github.com/efzynx/cek-resi-app/releases)
 
-Jika terjadi strict, pastikan Anda telah mengizinkan instalasi dari "Sumber Tidak Dikenal" atau "Install unknown apps" di pengaturan device Android Anda sebelum menginstal APK.
+Jika terjadi <i>strict</i>, pastikan Anda telah mengizinkan instalasi dari "Sumber Tidak Dikenal" atau "Install unknown apps" di pengaturan device Android Anda sebelum menginstal APK.<br>
+<b>Note!</b> Gunakan file explorer pihak ketiga seperti [ZArchiver](https://play.google.com/store/apps/details?id=ru.zdevs.zarchiver&pcampaignid=web_share) jika ingin terhindar dari scanning google play store. Atau tetap jalankan scanning meskipun penginstalan sedikit lama karena google sedang melakukan pengecekan apakah aplikasi berbahaya atau tidak (saat testing apk lolos dari scanning google yang berarti aman).
+
 
 
 ## 🚀 Setup & Menjalankan Proyek
@@ -168,11 +169,11 @@ Proyek ini mengikuti struktur standar aplikasi Android dengan pemisahan berdasar
 ## 🧑‍💻 Pembuat / Kontributor
 
 * **[Ahmad Fauzan Adiman]** - [2221400175]
-    * GitHub: `[@efzynx]`
+    * GitHub: [@efzynx](https://github.com/efzynx)
     * Email: `[me@efzyn.my.id]`
 
 * **[Zainullah Multazam]** - [2221400064]
-    * GitHub: `[@zainullahmultazam]`
+    * GitHub: [@zainullahmultazam](https://github.com/zainullahmultazam)
     * Email: `[zinononk04@gmail.com]`
 
 
