@@ -48,22 +48,20 @@ Aplikasi ini dibangun menggunakan Kotlin dan memanfaatkan API eksternal untuk me
 ## 📸 Tangkapan Layar (Screenshots)
 
 
-<p align="center">
-* *(Placeholder: Screenshot Splash Screen)*
-  <img src="/screenshots/Splash_Screen.jpg" alt="Splash Screen" width="200"/>
-* *(Placeholder: Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Terang)*
-  <img src="/screenshots/HalamanUtama_light.jpg" alt="Halaman Utama (Light Mode)" width="200"/>
-* *(Placeholder: Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Gelap)*
-  <img src="/screenshots/HalamanUtama_dark.jpg" alt="Halaman Utama (Dark Mode)" width="200"/>
-* *(Placeholder: Screenshot Halaman Detail Pelacakan)*
-  <img src="/screenshots/DetailPelacakan_light.jpg" alt="Detail Pelacakan" width="200"/>
-* *(Placeholder: Screenshot Sidebar Riwayat Pelacakan)*
-  <img src="/screenshots/sidebar.jpg" alt="Riwayat di Sidebar" width="200"/>
-* *(Placeholder: Screenshot Dialog Error)*
+<p align="justify">
+    <b align="">Screenshot Splash Screen</b><br>
+  <img src="/screenshots/Splash_Screen.jpg" alt="Splash Screen" width="200"/><br>
+    <b>Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Terang</b><br>
+  <img src="/screenshots/HalamanUtama_light.jpg" alt="Halaman Utama (Light Mode)" width="200"/><br>
+    <b>Screenshot Halaman Utama - Daftar Kurir & Input Resi - Mode Gelap</b><br>
+  <img src="/screenshots/HalamanUtama_dark.jpg" alt="Halaman Utama (Dark Mode)" width="200"/><br>
+    <b>Screenshot Halaman Detail Pelacakan</b><br>
+  <img src="/screenshots/DetailPelacakan_light.jpg" alt="Detail Pelacakan" width="200"/><br>
+    <b>Screenshot Sidebar Riwayat Pelacakan</b><br>
+  <img src="/screenshots/sidebar.jpg" alt="Riwayat di Sidebar" width="200"/><br>
+    <b>Screenshot Dialog Error</b><br>
   <img src="/screenshots/Eror_resi.jpg" alt="Eror nomor resi" width="200"/>
   <img src="/screenshots/Eror_koneksi.jpg" alt="Eror koneksi" width="200"/>
-
-
 </p>
 
 
