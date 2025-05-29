@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="default_courier_background">#FF303030</color>
+    <color name="default_courier_text">#FFFFFFFF</color>
+    <color name="default_courier_outline_color">#FF505050</color>
+    <color name="selected_courier_background_tint">#FF4A3F5E</color>
+    <color name="selected_courier_text">#FFBB86FC</color>
+    <color name="selected_courier_outline_color">#FFBB86FC</color>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="black">#FF000000</color>
+</resources>
