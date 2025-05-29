@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Cek Resi App</string>
+    <string name="navigation_drawer_open">Buka navigasi drawer</string>
+    <string name="navigation_drawer_close">Tutup navigasi drawer</string>
 </resources>

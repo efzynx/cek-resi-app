@@ -4,28 +4,31 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:paddingVertical="8dp">
+    android:paddingVertical="8dp"
+    android:paddingHorizontal="4dp">
 
     <TextView
         android:id="@+id/tvHistoryDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceCaption"
-        tools:text="28 Mei 2025, 10:00"/>
+        tools:text="28 Mei 2025, 10:00:32"/>
 
     <TextView
         android:id="@+id/tvHistoryDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceBody1"
-        tools:text="Paket telah diterima oleh Budi"/>
+        android:layout_marginTop="2dp"
+        tools:text="[Sawangan Kota Depok Hub] Paket anda telah diterima [Aan Aliudin]"/>
 
     <TextView
         android:id="@+id/tvHistoryLocation"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?attr/textAppearanceBody2"
-        tools:text="Lokasi: Bandung"
+        android:layout_marginTop="2dp"
+        tools:text="Lokasi: Sawangan Kota Depok Hub"
         android:visibility="gone"
         tools:visibility="visible"/>
 </LinearLayout>

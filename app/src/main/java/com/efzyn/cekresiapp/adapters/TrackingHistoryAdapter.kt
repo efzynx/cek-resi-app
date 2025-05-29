@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.ui.tracking
+package com.efzyn.cekresiapp.ui.tracking // Ganti dengan package-mu
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,13 +6,13 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.efzyn.cekresiapp.R
-import com.efzyn.cekresiapp.model.TrackingHistory
+import com.efzyn.cekresiapp.model.TrackingHistoryItem // Menggunakan model dari API
 
 class TrackingHistoryAdapter(
-    private var historyItems: List<TrackingHistory>
+    private var historyItems: List<TrackingHistoryItem>
 ) : RecyclerView.Adapter<TrackingHistoryAdapter.HistoryViewHolder>() {
 
-    fun updateData(newHistory: List<TrackingHistory>) {
+    fun updateData(newHistory: List<TrackingHistoryItem>) {
         this.historyItems = newHistory
         notifyDataSetChanged()
     }
@@ -34,8 +34,8 @@ class TrackingHistoryAdapter(
         private val tvDescription: TextView = itemView.findViewById(R.id.tvHistoryDescription)
         private val tvLocation: TextView = itemView.findViewById(R.id.tvHistoryLocation)
 
-        fun bind(history: TrackingHistory) {
-            tvDate.text = history.date // Format tanggal jika perlu
+        fun bind(history: TrackingHistoryItem) {
+            tvDate.text = history.date // Anda bisa memformat tanggal ini jika mau
             tvDescription.text = history.desc
             if (history.location.isNullOrEmpty()) {
                 tvLocation.visibility = View.GONE

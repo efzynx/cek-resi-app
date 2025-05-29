@@ -1,6 +1,4 @@
-package com.efzyn.cekresiapp.network
-
-
+package com.efzyn.cekresiapp.network // Ganti dengan package-mu
 
 import com.efzyn.cekresiapp.model.Courier
 import com.efzyn.cekresiapp.model.TrackingResponse
@@ -10,10 +8,10 @@ import retrofit2.http.Query
 
 interface BinderByteApiService {
 
-    @GET("v1/list_courier") // Pastikan endpoint ini benar
+    @GET("v1/list_courier")
     suspend fun getListCourier(
-        @Query("api_key") apiKey: String
-    ): Response<List<Courier>> // Asumsi responsnya adalah List dari Courier
+        @Query("api_key") apiKey: String // Meskipun mungkin tidak wajib untuk endpoint ini
+    ): Response<List<Courier>>
 
     @GET("v1/track")
     suspend fun trackShipment(

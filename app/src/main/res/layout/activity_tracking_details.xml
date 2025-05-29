@@ -14,6 +14,7 @@
             android:id="@+id/toolbarDetails"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            style="@style/Widget.MaterialComponents.Toolbar.PrimarySurface"
             app:title="Detail Pelacakan" />
     </com.google.android.material.appbar.AppBarLayout>
 
@@ -30,6 +31,7 @@
 
             <ProgressBar
                 android:id="@+id/progressBarDetails"
+                style="?android:attr/progressBarStyleLarge"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -55,7 +57,7 @@
                         android:id="@+id/tvAwbNumberDetail"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="AWB: CGK123456789"
+                        tools:text="No. Resi: CGK123456789"
                         android:textAppearance="?attr/textAppearanceHeadline6"/>
 
                     <TextView
@@ -63,7 +65,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         tools:text="Kurir: JNE Express"
-                        android:textAppearance="?attr/textAppearanceSubtitle1"/>
+                        android:textAppearance="?attr/textAppearanceSubtitle1"
+                        android:layout_marginTop="4dp"/>
 
                     <TextView
                         android:id="@+id/tvStatusDetail"
@@ -72,7 +75,7 @@
                         tools:text="Status: DELIVERED"
                         android:textAppearance="?attr/textAppearanceSubtitle1"
                         android:textStyle="bold"
-                        android:layout_marginTop="4dp"/>
+                        android:layout_marginTop="8dp"/>
 
                     <TextView
                         android:id="@+id/tvServiceDetail"
@@ -85,22 +88,24 @@
                         android:id="@+id/tvLastUpdateDesc"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Deskripsi: Paket telah diterima oleh Budi pada 28 Mei 2025"
+                        tools:text="Update: Paket telah diterima oleh Budi (28 Mei 2025)"
                         android:layout_marginTop="4dp"/>
 
                     <TextView
                         android:id="@+id/tvShipperReceiver"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Pengirim: Pengirim A ke Penerima B"
-                        android:layout_marginTop="4dp"/>
+                        tools:text="Pengirim: Pengirim A \nKepada: Penerima B"
+                        android:layout_marginTop="8dp"
+                        android:lineSpacingExtra="4dp"/>
 
                     <TextView
                         android:id="@+id/tvOriginDestination"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        tools:text="Asal: JAKARTA ke Tujuan: BANDUNG"
-                        android:layout_marginTop="4dp"/>
+                        tools:text="Asal: JAKARTA \nTujuan: BANDUNG"
+                        android:layout_marginTop="4dp"
+                        android:lineSpacingExtra="4dp"/>
 
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
@@ -109,9 +114,10 @@
                 android:id="@+id/tvHistoryTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Riwayat Perjalanan"
+                android:text="Riwayat Perjalanan Paket"
                 android:textAppearance="?attr/textAppearanceHeadline6"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="8dp"
                 android:visibility="gone"
                 tools:visibility="visible"/>
 
@@ -119,7 +125,6 @@
                 android:id="@+id/rvTrackingHistory"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
                 android:nestedScrollingEnabled="false"
                 tools:listitem="@layout/item_tracking_history"
                 tools:itemCount="3"
@@ -132,7 +137,9 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="16dp"
-                tools:text="Gagal memuat detail pelacakan."
+                tools:text="Gagal memuat detail pelacakan atau resi tidak ditemukan."
+                android:textAppearance="?attr/textAppearanceBody1"
+                android:textColor="?attr/colorError"
                 android:visibility="gone"/>
 
         </LinearLayout>

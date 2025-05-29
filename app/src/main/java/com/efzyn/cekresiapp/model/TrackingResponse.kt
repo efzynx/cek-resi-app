@@ -1,4 +1,4 @@
-package com.efzyn.cekresiapp.model // Ganti com.example.cekresi_uts dengan package-mu
+package com.efzyn.cekresiapp.model // Ganti dengan package-mu
 
 import com.google.gson.annotations.SerializedName
 
@@ -15,46 +15,50 @@ data class TrackData(
     @SerializedName("summary")
     val summary: TrackingSummary,
     @SerializedName("detail")
-    val detail: TrackingDetail, // Detail pengirim, penerima, asal, tujuan
+    val detail: TrackingDetail,
     @SerializedName("history")
-    val history: List<TrackingHistory>
+    val history: List<TrackingHistoryItem> // Menggunakan nama yang lebih jelas
 )
 
 data class TrackingSummary(
     @SerializedName("awb")
     val awb: String,
-    @SerializedName("courier") // Nama kurir dari API
-    val courier: String,
+    @SerializedName("courier")
+    val courier: String, // Nama kurir dari API tracking
     @SerializedName("service")
     val service: String?,
     @SerializedName("status")
     val status: String,
     @SerializedName("date")
-    val date: String, // Tanggal status terakhir
+    val date: String,
     @SerializedName("desc")
-    val desc: String?, // Deskripsi status terakhir (bisa kosong)
+    val desc: String?,
     @SerializedName("amount")
-    val amount: String?, // Tambahan dari JSON output
+    val amount: String?,
     @SerializedName("weight")
-    val weight: String?  // Tambahan dari JSON output
+    val weight: String?
 )
 
 data class TrackingDetail(
     @SerializedName("origin")
-    val origin: String?, // Bisa kosong
+    val origin: String?,
     @SerializedName("destination")
-    val destination: String?, // Bisa kosong
+    val destination: String?,
     @SerializedName("shipper")
-    val shipper: String?, // Bisa kosong
+    val shipper: String?,
     @SerializedName("receiver")
-    val receiver: String? // Bisa kosong
+    val receiver: String?
 )
 
-data class TrackingHistory(
+// Mengganti nama dari TrackingHistory menjadi TrackingHistoryItem agar tidak bentrok
+// dengan model HistoryItem untuk SharedPreferences, meskipun fieldnya sama.
+// Atau, jika fieldnya identik, kamu bisa menggunakan satu model saja.
+// Untuk contoh ini, saya bedakan untuk kejelasan konteks API vs Lokal.
+data class TrackingHistoryItem( // Ini adalah item riwayat dari API BinderByte
     @SerializedName("date")
     val date: String,
-    @SerializedName("desc") // Deskripsi histori
+    @SerializedName("desc")
     val desc: String,
     @SerializedName("location")
-    val location: String? // Bisa kosong
+    val location: String?
 )
